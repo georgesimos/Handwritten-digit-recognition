@@ -1,12 +1,7 @@
 import { MnistData } from './data.js';
-import { getModel } from './model.js';
+import { getCNNModel, getMLPModel } from './models.js';
 import { train } from './trainModel.js';
-import {
-  classNames,
-  doPrediction,
-  showAccuracy,
-  showConfusion
-} from './modelEvaluate.js';
+import { showAccuracy, showConfusion } from './modelEvaluate.js';
 
 async function showExamples(data) {
   // Create a container in the visor
@@ -43,7 +38,8 @@ async function run() {
   await data.load();
   await showExamples(data);
 
-  const model = getModel();
+  // const model = getCNNModel();
+  const model = getMLPModel();
   tfvis.show.modelSummary({ name: 'Model Architecture' }, model);
 
   await train(model, data);

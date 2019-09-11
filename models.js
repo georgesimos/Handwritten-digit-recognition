@@ -1,5 +1,5 @@
-export function getModel() {
-  const model = tf.sequential();
+export function getCNNModel() {
+  const model = tf.sequential(); // Create Model
 
   const IMAGE_WIDTH = 28;
   const IMAGE_HEIGHT = 28;
@@ -54,6 +54,67 @@ export function getModel() {
 
   // Choose an optimizer, loss function and accuracy metric,
   // then compile and return the model
+  const optimizer = tf.train.adam();
+  model.compile({
+    optimizer: optimizer,
+    loss: 'categoricalCrossentropy',
+    metrics: ['accuracy']
+  });
+
+  return model;
+}
+
+export function getMLPModel() {
+  const model = tf.sequential();
+
+  const IMAGE_WIDTH = 28;
+  const IMAGE_HEIGHT = 28;
+  const IMAGE_CHANNELS = 1;
+
+  //input layer (28x28 pixels)
+  model.add(
+    tf.layers.flatten({
+      inputShape: [IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS]
+    })
+  );
+  // 1st hidden layer
+  model.add(
+    tf.layers.dense({
+      // inputShape: [784],
+      units: 784,
+      activation: 'relu'
+    })
+  );
+  // 2st hidden layer
+  model.add(
+    tf.layers.dense({
+      units: 512,
+      activation: 'relu'
+    })
+  );
+  // 3st hidden layer
+  model.add(
+    tf.layers.dense({
+      units: 256,
+      activation: 'relu'
+    })
+  );
+  // 4st hidden layer
+  model.add(
+    tf.layers.dense({
+      units: 128,
+      activation: 'relu'
+    })
+  );
+  //output layer (0-9 digits)
+  const NUM_OUTPUT_CLASSES = 10;
+  model.add(
+    tf.layers.dense({
+      units: NUM_OUTPUT_CLASSES,
+      activation: 'softmax'
+    })
+  );
+
   const optimizer = tf.train.adam();
   model.compile({
     optimizer: optimizer,
